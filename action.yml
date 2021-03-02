@@ -2,15 +2,44 @@
 name: 'PRCleanup'
 description: 'Delete argo app when PR is closed'
 inputs:
-  kubeconfig:
-    description: 'secrets.ALPHA_KUBECTL'
+  aws_access_key_id:
+    description: 'AWS_ACCESS_KEY_ID'
+    required: true
+  aws_secret_access_key:
+    description: 'AWS_SECRET_ACCESS_KEY'
+    required: true
+  aws_default_region:
+    description: 'AWS_DEFAULT_REGION'
+    required: true
+  aws_org_id:
+    description: 'AWS_ORG_ID'
+    required: true
+  aws_eks_cluster_name:
+    description: 'AWS_EKS_CLUSTER_NAME'
+    required: true
+  github-pat:
+    description: 'secrets.GITHUB_PAT'
+    required: true
+  org:
+    description: 'github orginization'
+    required: true
+  infra-repo:
+    description: 'infra repo name'
     required: true
   pr-ref:
     description: 'github.event.pull_request.head.ref'
     required: true
+  
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.kubeconfig }}
+    - ${{ inputs.aws_access_key_id }}
+    - ${{ inputs.aws_secret_access_key }}
+    - ${{ inputs.aws_default_region }}
+    - ${{ inputs.aws_org_id }}
+    - ${{ inputs.aws_eks_cluster_name }}
+    - ${{ inputs.github-pat }}
+    - ${{ inputs.org }}
+    - ${{ inputs.infra-repo}}
     - ${{ inputs.pr-ref }}
